@@ -10,7 +10,7 @@ class Background extends ParallaxComponent{
   @override
   Future<void> onLoad() async {
     final layers=[
-      ParallaxImageData("images/background.jpg"),
+      ParallaxImageData("background.jpg"),
     ];
     final baseVelocity = Vector2(30 , 0);
     final velocityMultiplierDelta = Vector2(2.0, 0.0);
