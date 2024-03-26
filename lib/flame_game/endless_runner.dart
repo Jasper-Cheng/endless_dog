@@ -23,7 +23,7 @@ class EndlessRunner extends FlameGame<EndlessWorld> with HasCollisionDetection{
       ),
     );
     camera.viewport.add(TextComponent(
-      text: "3",
+      text: "0",
       position: Vector2(20, 40),
       textRenderer: textRenderer
     ));

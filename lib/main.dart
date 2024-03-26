@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:endless_dog/router.dart';
 import 'package:endless_dog/style/palette.dart';
 import 'package:flame/flame.dart';

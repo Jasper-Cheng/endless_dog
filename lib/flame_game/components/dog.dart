@@ -4,6 +4,7 @@ import 'package:flame/effects.dart';
 import 'package:flutter/animation.dart';
 
 import '../endless_runner.dart';
+import 'bone.dart';
 
 
 enum DogState {
@@ -13,7 +14,7 @@ enum DogState {
 }
 class Dog extends SpriteAnimationGroupComponent<DogState> with CollisionCallbacks,HasGameReference<EndlessRunner>{
 
-  final double _jumpHeight = -120;
+  final double _jumpHeight = -150;
   bool isFalling = false;
 
   @override
@@ -38,12 +39,14 @@ class Dog extends SpriteAnimationGroupComponent<DogState> with CollisionCallback
       ),
     };
     current=DogState.running;
+
+    add(RectangleHitbox());
   }
 
   void jump(){
     if(current!=DogState.running)return;
     current=DogState.jumping;
-    add(MoveByEffect(Vector2(20,_jumpHeight), EffectController(duration: 0.4, curve: Curves.easeOut,onMax: (){
+    add(MoveByEffect(Vector2(60,_jumpHeight), EffectController(duration: 0.4, curve: Curves.easeOut,onMax: (){
       isFalling=true;
     })));
   }
@@ -54,7 +57,7 @@ class Dog extends SpriteAnimationGroupComponent<DogState> with CollisionCallback
     if(isFalling){
       isFalling=false;
       current=DogState.falling;
-      add(MoveByEffect(Vector2(-20,-_jumpHeight), EffectController(duration: 0.4, curve: Curves.easeIn,onMax: (){
+      add(MoveByEffect(Vector2(-60,-_jumpHeight), EffectController(duration: 0.4, curve: Curves.easeIn,onMax: (){
         current=DogState.running;
       })));
     }
@@ -63,6 +66,10 @@ class Dog extends SpriteAnimationGroupComponent<DogState> with CollisionCallback
   @override
   void onCollisionStart(Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
+    if(other is Bone){
+      other.removeFromParent();
+    }
+    print("Bone has collision $other");
   }
 
 
