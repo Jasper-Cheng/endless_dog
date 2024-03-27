@@ -15,18 +15,22 @@ class EndlessRunner extends FlameGame<EndlessWorld> with HasCollisionDetection{
     camera.backdrop.add(Background());
     camera.viewfinder.anchor=Anchor.bottomLeft;
 
-
-    final textRenderer = TextPaint(
-      style: const TextStyle(
-        fontSize: 26,
-        color: Colors.black,
-      ),
+    final lifeComponent=TextComponent(
+        text: world.lifeNotifier.value.toString(),
+        position: Vector2(20, 40),
+        textRenderer: TextPaint(
+          style: const TextStyle(
+            fontSize: 26,
+            color: Colors.black,
+          ),
+        )
     );
-    camera.viewport.add(TextComponent(
-      text: "0",
-      position: Vector2(20, 40),
-      textRenderer: textRenderer
-    ));
+
+    world.lifeNotifier.addListener(() {
+      lifeComponent.text=world.lifeNotifier.value.toString();
+    });
+
+    camera.viewport.add(lifeComponent);
   }
 
 }
