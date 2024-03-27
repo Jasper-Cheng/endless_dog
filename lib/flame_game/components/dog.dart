@@ -18,13 +18,16 @@ enum DogState {
 }
 class Dog extends SpriteAnimationGroupComponent<DogState> with CollisionCallbacks,HasGameReference<EndlessRunner>{
 
+
+  Dog({super.position}) : super();
+
   final double _jumpHeight = -150;
   bool isFalling = false;
 
   @override
   Future<void> onLoad() async {
     size=Vector2.all(100);
-    position=Vector2(0, -180);
+    // position=Vector2(0, -180);
     priority=1;
 
     animations={
@@ -42,14 +45,14 @@ class Dog extends SpriteAnimationGroupComponent<DogState> with CollisionCallback
       ),
     };
     current=DogState.running;
-    // add(SpriteComponent(sprite: await Sprite.load('hello_world.jpg'),position: Vector2(size.x/2, 12),size: Vector2(22,20)));
-    add(RectangleHitbox(position: Vector2(size.x/2, 12),size: Vector2(22,20)));
+    // add(SpriteComponent(sprite: await Sprite.load('hello_world.jpg'),position: Vector2(46, 12),size: Vector2(24,20)));
+    add(RectangleHitbox(position: Vector2(46, 12),size: Vector2(24,20)));
   }
 
   void jump(){
     if(current!=DogState.running)return;
     current=DogState.jumping;
-    add(MoveByEffect(Vector2(66,_jumpHeight), EffectController(duration: 0.3, curve: Curves.easeOut,onMax: (){
+    add(MoveByEffect(Vector2(66,_jumpHeight), EffectController(duration: 0.6, curve: Curves.easeOut,onMax: (){
       isFalling=true;
     })));
   }
@@ -60,7 +63,7 @@ class Dog extends SpriteAnimationGroupComponent<DogState> with CollisionCallback
     if(isFalling){
       isFalling=false;
       current=DogState.falling;
-      add(MoveByEffect(Vector2(-66,-_jumpHeight), EffectController(duration: 0.3, curve: Curves.easeIn,onMax: (){
+      add(MoveByEffect(Vector2(-66,-_jumpHeight), EffectController(duration: 0.8, curve: Curves.easeIn,onMax: (){
         current=DogState.running;
       })));
     }

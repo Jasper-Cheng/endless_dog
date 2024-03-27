@@ -1,14 +1,16 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:endless_dog/flame_game/components/bat.dart';
 import 'package:endless_dog/flame_game/components/dog.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/experimental.dart';
 import 'package:flutter/material.dart';
 
+import 'components/bat.dart';
 import 'components/bone.dart';
+import 'components/volFire.dart';
+import 'components/volcano.dart';
 
 class EndlessWorld extends World with HasGameReference,TapCallbacks{
 
@@ -20,7 +22,7 @@ class EndlessWorld extends World with HasGameReference,TapCallbacks{
 
   @override
   Future<void> onLoad() async{
-    dog=Dog();
+    dog=Dog(position: Vector2(0,-180));
     add(dog);
 
     add(
@@ -46,6 +48,29 @@ class EndlessWorld extends World with HasGameReference,TapCallbacks{
         random: _random,
       ),
     );
+
+    // add(Volcano());
+    add(
+        SpawnComponent(
+          factory: (_) => VolFire(),
+          period: 1,
+          area: Rectangle.fromLTRB(
+              game.size.x,-125,game.size.x/1.3,-125
+          ),
+          random: _random,
+        )
+    );
+    // add(
+    //   SpawnComponent.periodRange(
+    //     factory: (_) => Man(),
+    //     minPeriod: 0.1,
+    //     maxPeriod: 1,
+    //     area: Rectangle.fromLTRB(
+    //         game.size.x,-230,game.size.x/1.3,-230
+    //     ),
+    //     random: _random,
+    //   ),
+    // );
   }
 
   void addLife(){
