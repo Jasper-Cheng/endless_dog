@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:endless_dog/flame_game/components/bat.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
@@ -41,14 +42,14 @@ class Dog extends SpriteAnimationGroupComponent<DogState> with CollisionCallback
       ),
     };
     current=DogState.running;
-
-    add(RectangleHitbox(position: Vector2(size.x/2, 12),size: Vector2(16,20)));
+    // add(SpriteComponent(sprite: await Sprite.load('hello_world.jpg'),position: Vector2(size.x/2, 12),size: Vector2(22,20)));
+    add(RectangleHitbox(position: Vector2(size.x/2, 12),size: Vector2(22,20)));
   }
 
   void jump(){
     if(current!=DogState.running)return;
     current=DogState.jumping;
-    add(MoveByEffect(Vector2(66,_jumpHeight), EffectController(duration: 0.5, curve: Curves.easeOut,onMax: (){
+    add(MoveByEffect(Vector2(66,_jumpHeight), EffectController(duration: 0.3, curve: Curves.easeOut,onMax: (){
       isFalling=true;
     })));
   }
@@ -59,7 +60,7 @@ class Dog extends SpriteAnimationGroupComponent<DogState> with CollisionCallback
     if(isFalling){
       isFalling=false;
       current=DogState.falling;
-      add(MoveByEffect(Vector2(-66,-_jumpHeight), EffectController(duration: 0.5, curve: Curves.easeIn,onMax: (){
+      add(MoveByEffect(Vector2(-66,-_jumpHeight), EffectController(duration: 0.3, curve: Curves.easeIn,onMax: (){
         current=DogState.running;
       })));
     }
@@ -71,6 +72,9 @@ class Dog extends SpriteAnimationGroupComponent<DogState> with CollisionCallback
     if(other is Bone){
       other.removeFromParent();
       game.world.addLife();
+    }else if(other is Bat){
+      other.removeFromParent();
+      game.world.removeLife();
     }
     print("Bone has collision $other");
   }

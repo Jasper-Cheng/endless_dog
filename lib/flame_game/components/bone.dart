@@ -14,7 +14,8 @@ class Bone extends SpriteAnimationComponent with HasGameReference, HasWorldRefer
       [await game.loadSprite('bone0.png'),await game.loadSprite('bone1.png'),await game.loadSprite('bone0.png'),await game.loadSprite('bone2.png')],
       stepTime: 0.40,
     );
-    add(RectangleHitbox());
+    // add(SpriteComponent(sprite: await Sprite.load('hello_world.jpg'),position: Vector2(6, 6),size: Vector2(28,26)));
+    add(RectangleHitbox(position: Vector2(6, 6),size: Vector2(28,26)));
   }
 
   @override

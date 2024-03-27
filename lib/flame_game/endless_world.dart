@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:endless_dog/flame_game/components/bat.dart';
 import 'package:endless_dog/flame_game/components/dog.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
@@ -25,10 +26,22 @@ class EndlessWorld extends World with HasGameReference,TapCallbacks{
     add(
       SpawnComponent.periodRange(
         factory: (_) => Bone(),
-        minPeriod: 0.2,
-        maxPeriod: 1,
+        minPeriod: 1.0,
+        maxPeriod: 6.0,
         area: Rectangle.fromLTRB(
-          game.size.x,-game.size.y/1.8,game.size.x/1.3,-game.size.y/1.2
+          game.size.x,-game.size.y/1.8,game.size.x/1.3,-game.size.y/1.1
+        ),
+        random: _random,
+      ),
+    );
+
+    add(
+      SpawnComponent.periodRange(
+        factory: (_) => Bat(),
+        minPeriod: 1.0,
+        maxPeriod: 5.0,
+        area: Rectangle.fromLTRB(
+            game.size.x,-game.size.y/1.6,game.size.x/1.3,-game.size.y/1.1
         ),
         random: _random,
       ),
@@ -37,6 +50,10 @@ class EndlessWorld extends World with HasGameReference,TapCallbacks{
 
   void addLife(){
     lifeNotifier.value++;
+  }
+
+  void removeLife(){
+    lifeNotifier.value--;
   }
 
   @override
