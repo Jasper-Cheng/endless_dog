@@ -32,7 +32,7 @@ class EndlessWorld extends World with HasGameReference,TapCallbacks{
         minPeriod: 1.0,
         maxPeriod: 6.0,
         area: Rectangle.fromLTRB(
-          game.size.x,-game.size.y/1.8,game.size.x,-game.size.y/1.1
+          game.size.x,-game.size.y/1.8,game.size.x,-game.size.y/1.15
         ),
         random: _random,
       ),
@@ -44,7 +44,7 @@ class EndlessWorld extends World with HasGameReference,TapCallbacks{
         minPeriod: 1.0,
         maxPeriod: 5.0,
         area: Rectangle.fromLTRB(
-            game.size.x,-game.size.y/1.6,game.size.x,-game.size.y/1.1
+            game.size.x,-game.size.y/1.6,game.size.x,-game.size.y/1.15
         ),
         random: _random,
       ),

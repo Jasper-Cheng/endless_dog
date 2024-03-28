@@ -27,6 +27,8 @@ class Dog extends SpriteAnimationGroupComponent<DogState> with CollisionCallback
   final double _jumpHeight = -160;
   bool isFalling = false;
 
+  double backSpeed=6;
+
   @override
   Future<void> onLoad() async {
     size=Vector2.all(80);
@@ -56,7 +58,7 @@ class Dog extends SpriteAnimationGroupComponent<DogState> with CollisionCallback
   void jump(){
     if(current!=DogState.running)return;
     current=DogState.jumping;
-    add(MoveByEffect(Vector2(50,_jumpHeight), EffectController(duration: 0.6, curve: Curves.easeOut,onMax: (){
+    add(MoveByEffect(Vector2(45,_jumpHeight), EffectController(duration: 0.45, curve: Curves.linear,onMax: (){
       isFalling=true;
     })));
   }
@@ -64,12 +66,22 @@ class Dog extends SpriteAnimationGroupComponent<DogState> with CollisionCallback
   @override
   void update(double dt) {
     super.update(dt);
+    if(position.x+size.x>=game.size.x){
+      position.x=game.size.x-size.x;
+    }
     if(isFalling){
       isFalling=false;
       current=DogState.falling;
-      add(MoveByEffect(Vector2(30,-_jumpHeight), EffectController(duration: 0.8, curve: Curves.easeIn,onMax: (){
+      add(MoveByEffect(Vector2(30,-_jumpHeight), EffectController(duration: 0.6, curve: Curves.easeIn,onMax: (){
         current=DogState.running;
       })));
+    }
+    if(current==DogState.running){
+      if(position.x>=backSpeed){
+        position.x=position.x-backSpeed;
+      }else{
+        position.x=0;
+      }
     }
   }
 
