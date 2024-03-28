@@ -8,10 +8,9 @@ import 'package:flame/events.dart';
 import 'package:flame/experimental.dart';
 import 'package:flutter/material.dart';
 
-import 'components/bat.dart';
 import 'components/bone.dart';
 import 'components/volFire.dart';
-import 'components/volcano.dart';
+import 'game_screen.dart';
 
 class EndlessWorld extends World with HasGameReference,TapCallbacks{
 
@@ -19,10 +18,11 @@ class EndlessWorld extends World with HasGameReference,TapCallbacks{
   late final Bone chicken;
 
   final Random _random=Random(10);
-  final lifeNotifier = ValueNotifier(3);
+  final lifeNotifier = ValueNotifier(1);
 
   @override
   Future<void> onLoad() async{
+    game.overlays.add(GameScreen.backButtonKey);
     dog=Dog(position: Vector2(0,-160));
     add(dog);
 
@@ -80,6 +80,10 @@ class EndlessWorld extends World with HasGameReference,TapCallbacks{
 
   void removeLife(){
     lifeNotifier.value--;
+    if(lifeNotifier.value==0){
+      game.pauseEngine();
+      game.overlays.add(GameScreen.dieDialogKey);
+    }
   }
 
   @override
