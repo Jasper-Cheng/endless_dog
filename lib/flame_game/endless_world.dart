@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:endless_dog/flame_game/components/bomb.dart';
 import 'package:endless_dog/flame_game/components/dog.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
@@ -22,7 +23,7 @@ class EndlessWorld extends World with HasGameReference,TapCallbacks{
 
   @override
   Future<void> onLoad() async{
-    dog=Dog(position: Vector2(0,-180));
+    dog=Dog(position: Vector2(0,-160));
     add(dog);
 
     add(
@@ -39,7 +40,7 @@ class EndlessWorld extends World with HasGameReference,TapCallbacks{
 
     add(
       SpawnComponent.periodRange(
-        factory: (_) => Bat(),
+        factory: (_) => Bomb(),
         minPeriod: 1.0,
         maxPeriod: 5.0,
         area: Rectangle.fromLTRB(
@@ -55,7 +56,7 @@ class EndlessWorld extends World with HasGameReference,TapCallbacks{
           factory: (_) => VolFire(),
           period: 6,
           area: Rectangle.fromLTRB(
-              game.size.x,-125,game.size.x,-125
+              game.size.x,-120,game.size.x,-120
           ),
           random: _random,
         )

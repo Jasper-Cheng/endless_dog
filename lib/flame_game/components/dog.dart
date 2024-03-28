@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:endless_dog/flame_game/components/bat.dart';
+import 'package:endless_dog/flame_game/components/bomb.dart';
 import 'package:endless_dog/flame_game/components/fire.dart';
 import 'package:endless_dog/flame_game/components/volFire.dart';
 import 'package:flame/collisions.dart';
@@ -23,12 +24,12 @@ class Dog extends SpriteAnimationGroupComponent<DogState> with CollisionCallback
 
   Dog({super.position}) : super();
 
-  final double _jumpHeight = -150;
+  final double _jumpHeight = -160;
   bool isFalling = false;
 
   @override
   Future<void> onLoad() async {
-    size=Vector2.all(100);
+    size=Vector2.all(80);
     // position=Vector2(0, -180);
     priority=1;
 
@@ -48,14 +49,14 @@ class Dog extends SpriteAnimationGroupComponent<DogState> with CollisionCallback
     };
     current=DogState.running;
     // add(SpriteComponent(sprite: await Sprite.load('hello_world.jpg'),size: Vector2(60,80),position: Vector2(20,10)));
-    // add(CircleComponent(radius: 36,position: Vector2(20,16)));
-    add(CircleHitbox(radius: 36,position: Vector2(20,16)));
+    // add(CircleComponent(radius: 26,position: Vector2(18,16)));
+    add(CircleHitbox(radius: 26,position: Vector2(18,16)));
   }
 
   void jump(){
     if(current!=DogState.running)return;
     current=DogState.jumping;
-    add(MoveByEffect(Vector2(66,_jumpHeight), EffectController(duration: 0.6, curve: Curves.easeOut,onMax: (){
+    add(MoveByEffect(Vector2(50,_jumpHeight), EffectController(duration: 0.6, curve: Curves.easeOut,onMax: (){
       isFalling=true;
     })));
   }
@@ -66,7 +67,7 @@ class Dog extends SpriteAnimationGroupComponent<DogState> with CollisionCallback
     if(isFalling){
       isFalling=false;
       current=DogState.falling;
-      add(MoveByEffect(Vector2(-66,-_jumpHeight), EffectController(duration: 0.8, curve: Curves.easeIn,onMax: (){
+      add(MoveByEffect(Vector2(30,-_jumpHeight), EffectController(duration: 0.8, curve: Curves.easeIn,onMax: (){
         current=DogState.running;
       })));
     }
@@ -79,7 +80,7 @@ class Dog extends SpriteAnimationGroupComponent<DogState> with CollisionCallback
       add(ColorEffect(Colors.green, EffectController(duration: 0.2,alternate: true,repeatCount: 1)));
       other.removeFromParent();
       game.world.addLife();
-    }else if(other is Bat){
+    }else if(other is Bomb){
       add(ColorEffect(Colors.red, EffectController(duration: 0.2,alternate: true,repeatCount: 1)));
       // other.removeFromParent();
       game.world.removeLife();

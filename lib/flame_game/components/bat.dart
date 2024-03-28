@@ -1,5 +1,6 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 
 import '../endless_world.dart';
 
@@ -8,14 +9,31 @@ class Bat extends SpriteAnimationComponent with HasGameReference, HasWorldRefere
   @override
   Future<void> onLoad() async {
 
-    size=Vector2(80, 80);
+    size=Vector2(80, 60);
     // position=Vector2(game.size.x, -game.size.y*0.45);
+    // sprite=await game.loadSprite('bat2.png');
     animation=SpriteAnimation.spriteList(
       [await game.loadSprite('bat2.png'),await game.loadSprite('bat1.png'),await game.loadSprite('bat2.png'),await game.loadSprite('bat3.png')],
-      stepTime: 0.30,
+      stepTime: 0.25,
     );
-    // add(SpriteComponent(sprite: await Sprite.load('hello_world.jpg'),position: Vector2(23, 15),size: Vector2(35,40)));
-    add(RectangleHitbox(position: Vector2(23, 15),size: Vector2(35,40)));
+    add(PolygonComponent(
+      [
+        Vector2(29, 13),
+        Vector2(56, 44),
+        Vector2(54, 45),
+        Vector2(25, 15)
+        // Vector2(20, 10)
+      ]
+    ));
+    // add(ScaleEffect.by(Vector2(1.5,1.5), EffectController(duration: 3)));
+    add(PolygonHitbox(
+      [
+        Vector2(29, 13),
+        Vector2(56, 44),
+        Vector2(54, 45),
+        Vector2(25, 15)
+      ],
+    ));
   }
 
   @override
