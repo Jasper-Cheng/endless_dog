@@ -76,12 +76,15 @@ class Dog extends SpriteAnimationGroupComponent<DogState> with CollisionCallback
   void onCollisionStart(Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
     if(other is Bone){
+      add(ColorEffect(Colors.green, EffectController(duration: 0.2,alternate: true,repeatCount: 1)));
       other.removeFromParent();
       game.world.addLife();
     }else if(other is Bat){
+      add(ColorEffect(Colors.red, EffectController(duration: 0.2,alternate: true,repeatCount: 1)));
       // other.removeFromParent();
       game.world.removeLife();
     }else if(other is Fire){
+      add(ColorEffect(const Color(0xFF9E3608), EffectController(duration: 0.2,alternate: true,repeatCount: 1)));
       // other.parent?.removeFromParent();
       game.world.removeLife();
     }
