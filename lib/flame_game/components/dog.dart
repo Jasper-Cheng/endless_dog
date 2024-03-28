@@ -1,6 +1,8 @@
 import 'dart:ui';
 
 import 'package:endless_dog/flame_game/components/bat.dart';
+import 'package:endless_dog/flame_game/components/fire.dart';
+import 'package:endless_dog/flame_game/components/volFire.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
@@ -45,8 +47,9 @@ class Dog extends SpriteAnimationGroupComponent<DogState> with CollisionCallback
       ),
     };
     current=DogState.running;
-    // add(SpriteComponent(sprite: await Sprite.load('hello_world.jpg'),position: Vector2(46, 12),size: Vector2(24,20)));
-    add(RectangleHitbox(position: Vector2(46, 12),size: Vector2(24,20)));
+    // add(SpriteComponent(sprite: await Sprite.load('hello_world.jpg'),size: Vector2(60,80),position: Vector2(20,10)));
+    // add(CircleComponent(radius: 36,position: Vector2(20,16)));
+    add(CircleHitbox(radius: 36,position: Vector2(20,16)));
   }
 
   void jump(){
@@ -76,7 +79,10 @@ class Dog extends SpriteAnimationGroupComponent<DogState> with CollisionCallback
       other.removeFromParent();
       game.world.addLife();
     }else if(other is Bat){
-      other.removeFromParent();
+      // other.removeFromParent();
+      game.world.removeLife();
+    }else if(other is Fire){
+      // other.parent?.removeFromParent();
       game.world.removeLife();
     }
     print("Bone has collision $other");

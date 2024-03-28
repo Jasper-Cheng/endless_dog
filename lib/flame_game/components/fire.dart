@@ -1,6 +1,7 @@
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
+import 'package:flutter/material.dart';
 
 import '../endless_world.dart';
 
@@ -16,17 +17,8 @@ class Fire extends SpriteComponent with HasGameReference, HasWorldReference<Endl
     sprite=await game.loadSprite('fire.png');
 
     add(MoveByEffect(Vector2(0,-25), EffectController(duration: 3)));
-    // add(SpriteComponent(sprite: await Sprite.load('jump_dog.png'),position: Vector2(0, -10),size: Vector2(30,60)));
-    // add(RectangleHitbox());
-    // add();
-    // add(SequenceEffect(
-    //   [
-    //     MoveByEffect(Vector2(0,-230), EffectController(duration: 3))
-    //   ]
-    // ));
-    // add(SpriteComponent(sprite: await Sprite.load('hello_world.jpg'),position: Vector2(23, 15),size: Vector2(35,45)));
-    // add(RectangleHitbox(position: Vector2(23, 15),size: Vector2(35,45)));
+    // add(SpriteComponent(sprite: await Sprite.load('hello_world.jpg'),size: Vector2(12,30)));
+    add(RectangleHitbox(size: Vector2(12,30)));
   }
-
 
 }

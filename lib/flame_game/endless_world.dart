@@ -31,7 +31,7 @@ class EndlessWorld extends World with HasGameReference,TapCallbacks{
         minPeriod: 1.0,
         maxPeriod: 6.0,
         area: Rectangle.fromLTRB(
-          game.size.x,-game.size.y/1.8,game.size.x/1.3,-game.size.y/1.1
+          game.size.x,-game.size.y/1.8,game.size.x,-game.size.y/1.1
         ),
         random: _random,
       ),
@@ -43,7 +43,7 @@ class EndlessWorld extends World with HasGameReference,TapCallbacks{
         minPeriod: 1.0,
         maxPeriod: 5.0,
         area: Rectangle.fromLTRB(
-            game.size.x,-game.size.y/1.6,game.size.x/1.3,-game.size.y/1.1
+            game.size.x,-game.size.y/1.6,game.size.x,-game.size.y/1.1
         ),
         random: _random,
       ),
@@ -53,9 +53,9 @@ class EndlessWorld extends World with HasGameReference,TapCallbacks{
     add(
         SpawnComponent(
           factory: (_) => VolFire(),
-          period: 1,
+          period: 6,
           area: Rectangle.fromLTRB(
-              game.size.x,-125,game.size.x/1.3,-125
+              game.size.x,-125,game.size.x,-125
           ),
           random: _random,
         )

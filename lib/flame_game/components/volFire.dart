@@ -12,8 +12,6 @@ class VolFire extends PositionComponent with HasGameReference, HasWorldReference
     size=Vector2(100, 0);
     add(Fire(position: Vector2(25,0)));
     add(Volcano(position: Vector2(0,0)));
-    // add(SpriteComponent(sprite: await Sprite.load('jump_dog.png'),position: Vector2(0, 12),size: Vector2(24,20)));
-    // add(RectangleHitbox());
   }
 
   @override
