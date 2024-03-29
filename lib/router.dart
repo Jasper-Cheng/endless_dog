@@ -25,7 +25,6 @@ final router = GoRouter(
       // builder: (context, state) => const GameScreen(),
         pageBuilder: (context, state){
           return CustomTransitionPage(
-              key: state.pageKey,
               child: const GameScreen(),
               transitionsBuilder:(context, animation, secondaryAnimation, child){
                 return FadeTransition(opacity: CurveTween(curve: Curves.easeInOutCirc).animate(animation),
