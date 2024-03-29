@@ -27,7 +27,7 @@ class Dog extends SpriteAnimationGroupComponent<DogState> with CollisionCallback
   final double _jumpHeight = -160;
   bool isFalling = false;
 
-  double backSpeed=6;
+  double backSpeed=1.8;
 
   @override
   Future<void> onLoad() async {

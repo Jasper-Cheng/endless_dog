@@ -44,7 +44,8 @@ class GameDieDialog extends StatelessWidget {
                   size: 30,
                 ),
                 onTap: (){
-                  GoRouter.of(context).go(RoutePath.home);
+                  // GoRouter.of(context).go(RoutePath.home);
+                  GoRouter.of(context).pop();
                 },
               ),
               const SizedBox(height: 30),
@@ -57,7 +58,10 @@ class GameDieDialog extends StatelessWidget {
                 ),
                 onTap: (){
                   game?.overlays.remove(GameScreen.dieDialogKey);
+                  // GoRouter.of(context).pop();
                   GoRouter.of(context).pushReplacement(RoutePath.game_screen);
+                  print("routes ${GoRouter.of(context).configuration.routes}");
+                  print("GoRouter.of(context) ${GoRouter.of(context).canPop()}");
                 },
               ),
             ],
