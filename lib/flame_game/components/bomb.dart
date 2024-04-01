@@ -21,14 +21,15 @@ class Bomb extends SpriteAnimationComponent with HasGameReference, HasWorldRefer
     // add(RotateEffect.by(360, EffectController(duration: 1,infinite: true)));
     add(CircleHitbox(
         radius: 14,
-        position: Vector2(1,1)
+        position: Vector2(1,1),
+        collisionType: CollisionType.passive
     ));
   }
 
   @override
   void update(double dt) {
     super.update(dt);
-    position.x -= 150 * dt;
+    position.x -= world.baseSpeedFactory*150 * dt;
 
     if(position.x<=-size.x){
       removeFromParent();

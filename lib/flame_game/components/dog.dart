@@ -1,9 +1,7 @@
 import 'dart:ui';
 
-import 'package:endless_dog/flame_game/components/bat.dart';
 import 'package:endless_dog/flame_game/components/bomb.dart';
 import 'package:endless_dog/flame_game/components/fire.dart';
-import 'package:endless_dog/flame_game/components/volFire.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
@@ -28,6 +26,8 @@ class Dog extends SpriteAnimationGroupComponent<DogState> with CollisionCallback
   bool isFalling = false;
 
   double backSpeed=1.8;
+
+  bool invincible=false;
 
   @override
   Future<void> onLoad() async {
@@ -58,7 +58,7 @@ class Dog extends SpriteAnimationGroupComponent<DogState> with CollisionCallback
   void jump(){
     if(current!=DogState.running)return;
     current=DogState.jumping;
-    add(MoveByEffect(Vector2(45,_jumpHeight), EffectController(duration: 0.45, curve: Curves.linear,onMax: (){
+    add(MoveByEffect(Vector2(45,_jumpHeight), EffectController(duration: 0.5-game.world.baseSpeedFactory/20, curve: Curves.linear,onMax: (){
       isFalling=true;
     })));
   }
@@ -72,13 +72,13 @@ class Dog extends SpriteAnimationGroupComponent<DogState> with CollisionCallback
     if(isFalling){
       isFalling=false;
       current=DogState.falling;
-      add(MoveByEffect(Vector2(30,-_jumpHeight), EffectController(duration: 0.6, curve: Curves.easeIn,onMax: (){
+      add(MoveByEffect(Vector2(30,-_jumpHeight), EffectController(duration: 0.65-game.world.baseSpeedFactory/20, curve: Curves.easeIn,onMax: (){
         current=DogState.running;
       })));
     }
     if(current==DogState.running){
-      if(position.x>=backSpeed){
-        position.x=position.x-backSpeed;
+      if(position.x>=backSpeed*game.world.baseSpeedFactory){
+        position.x=position.x-backSpeed*game.world.baseSpeedFactory;
       }else{
         position.x=0;
       }
@@ -89,19 +89,30 @@ class Dog extends SpriteAnimationGroupComponent<DogState> with CollisionCallback
   void onCollisionStart(Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
     if(other is Bone){
-      add(ColorEffect(Colors.green, EffectController(duration: 0.2,alternate: true,repeatCount: 1)));
+      add(ColorEffect(Colors.green, EffectController(duration: 0.3,alternate: true,repeatCount: 1)));
       other.removeFromParent();
       game.world.addLife();
-    }else if(other is Bomb){
-      add(ColorEffect(Colors.red, EffectController(duration: 0.2,alternate: true,repeatCount: 1)));
+      return;
+    }
+    // print("Bone has collision $other  invincible $invincible");
+    if(invincible)return;
+    invincible=true;
+    if(other is Bomb){
+      add(ColorEffect(Colors.red, EffectController(duration: 0.3,alternate: true,repeatCount: 1),
+          onComplete: (){
+            invincible=false;
+          }));
       // other.removeFromParent();
       game.world.removeLife();
     }else if(other is Fire){
-      add(ColorEffect(const Color(0xFF9E3608), EffectController(duration: 0.2,alternate: true,repeatCount: 1)));
+      add(ColorEffect(const Color(0xFF9E3608), EffectController(duration: 0.3,alternate: true,repeatCount: 1),
+          onComplete: (){
+            invincible=false;
+          }));
       // other.parent?.removeFromParent();
       game.world.removeLife();
     }
-    print("Bone has collision $other");
+
   }
 
 

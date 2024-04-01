@@ -15,13 +15,13 @@ class Bone extends SpriteAnimationComponent with HasGameReference, HasWorldRefer
       stepTime: 0.40,
     );
     // add(SpriteComponent(sprite: await Sprite.load('hello_world.jpg'),position: Vector2(4, 4),size: Vector2(24,24)));
-    add(RectangleHitbox(position: Vector2(4, 4),size: Vector2(24,24)));
+    add(RectangleHitbox(position: Vector2(4, 4),size: Vector2(24,24),collisionType: CollisionType.passive));
   }
 
   @override
   void update(double dt) {
     super.update(dt);
-    position.x -= 200 * dt;
+    position.x -= world.baseSpeedFactory*200 * dt;
 
     if(position.x<=-size.x){
       removeFromParent();

@@ -17,7 +17,7 @@ class VolFire extends PositionComponent with HasGameReference, HasWorldReference
   @override
   void update(double dt) {
     super.update(dt);
-    position.x -= 100 * dt;
+    position.x -= world.baseSpeedFactory*100 * dt;
 
     if(position.x<=-size.x){
       removeFromParent();

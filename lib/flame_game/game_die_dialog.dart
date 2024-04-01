@@ -58,10 +58,11 @@ class GameDieDialog extends StatelessWidget {
                 ),
                 onTap: (){
                   game?.overlays.remove(GameScreen.dieDialogKey);
-                  // GoRouter.of(context).pop();
-                  GoRouter.of(context).pushReplacement(RoutePath.game_screen);
+                  GoRouter.of(context).pop();
+                  GoRouter.of(context).push(RoutePath.game_screen);
+                  // GoRouter.of(context).pushReplacement(RoutePath.game_screen);
                   print("routes ${GoRouter.of(context).configuration.routes}");
-                  print("GoRouter.of(context) ${GoRouter.of(context).canPop()}");
+                  // print("GoRouter.of(context) ${GoRouter.of(context).canPop()}");
                 },
               ),
             ],
