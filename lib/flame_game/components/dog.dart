@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:endless_dog/flame_game/components/bomb.dart';
 import 'package:endless_dog/flame_game/components/fire.dart';
 import 'package:flame/collisions.dart';
@@ -14,53 +12,80 @@ import 'package:flutter/material.dart';
 
 enum DogState {
   running,
-  jumping,
-  falling,
+  jumpDown,
+  doubleJumpDown
 }
 class Dog extends SpriteAnimationGroupComponent<DogState> with CollisionCallbacks,HasGameReference<EndlessRunner>{
 
 
   Dog({super.position}) : super();
 
-  final double _jumpHeight = -160;
-  bool isFalling = false;
-
   double backSpeed=1.8;
 
   bool invincible=false;
 
+  late MoveAlongPathEffect jumpingAlongPathEffect;
+  late Path jumpingAlongPath;
+
   @override
   Future<void> onLoad() async {
-    size=Vector2.all(80);
-    // position=Vector2(0, -180);
+    size=Vector2.all(70);
     priority=1;
 
+    jumpingAlongPathEffect=MoveAlongPathEffect(
+        Path()..addPolygon(const [
+          Offset(0, 0),
+          Offset(30, -110),
+          Offset(60, 0),
+        ], false), EffectController(duration: 0.8,
+        curve: const Cubic(0.3, 0.75, 0.75, 0.3)),
+        onComplete: (){
+          current=DogState.running;
+        });
+
+    Sprite jumpDog=await game.loadSprite('run_dog.png');
     animations={
       DogState.running: SpriteAnimation.spriteList(
         [await game.loadSprite('run_dog.png'),await game.loadSprite('run_dog2.png')],
         stepTime:  0.38,
       ),
-      DogState.jumping: SpriteAnimation.spriteList(
-        [await game.loadSprite('jump_dog.png')],
+      DogState.jumpDown: SpriteAnimation.spriteList(
+        [jumpDog],
         stepTime: double.infinity,
       ),
-      DogState.falling: SpriteAnimation.spriteList(
-        [await game.loadSprite('fall_dog.png')],
+      DogState.doubleJumpDown: SpriteAnimation.spriteList(
+        [jumpDog],
         stepTime: double.infinity,
       ),
     };
     current=DogState.running;
     // add(SpriteComponent(sprite: await Sprite.load('hello_world.jpg'),size: Vector2(60,80),position: Vector2(20,10)));
-    // add(CircleComponent(radius: 26,position: Vector2(18,16)));
-    add(CircleHitbox(radius: 26,position: Vector2(18,16)));
+    // add(CircleComponent(radius: 20,position: Vector2(18,16)));
+    add(CircleHitbox(radius: 20,position: Vector2(18,16)));
   }
 
   void jump(){
-    if(current!=DogState.running)return;
-    current=DogState.jumping;
-    add(MoveByEffect(Vector2(45,_jumpHeight), EffectController(duration: 0.5-game.world.baseSpeedFactory/20, curve: Curves.linear,onMax: (){
-      isFalling=true;
-    })));
+    if(current==DogState.doubleJumpDown)return;
+    if(current==DogState.running){
+      current=DogState.jumpDown;
+      jumpingAlongPathEffect.reset();
+      add(jumpingAlongPathEffect);
+    }else if(current==DogState.jumpDown){
+      jumpingAlongPathEffect.pause();
+      add(MoveAlongPathEffect(
+          Path()..addPolygon([
+            const Offset(0, 0),
+            const Offset(40, -110),
+            Offset(80, -position.y-150),
+          ], false), EffectController(duration: 0.8+(-position.y-160)*0.001,
+          curve: Curves.linear),
+          onComplete: (){
+            current=DogState.running;
+          }));
+      current=DogState.doubleJumpDown;
+    }
+    // print("-position.y-160=${-position.y-160}");
+    // print("0.8+(-position.y-160)*0.005=${0.8+(-position.y-160)*0.005}");
   }
 
   @override
@@ -68,13 +93,6 @@ class Dog extends SpriteAnimationGroupComponent<DogState> with CollisionCallback
     super.update(dt);
     if(position.x+size.x>=game.size.x){
       position.x=game.size.x-size.x;
-    }
-    if(isFalling){
-      isFalling=false;
-      current=DogState.falling;
-      add(MoveByEffect(Vector2(30,-_jumpHeight), EffectController(duration: 0.65-game.world.baseSpeedFactory/20, curve: Curves.easeIn,onMax: (){
-        current=DogState.running;
-      })));
     }
     if(current==DogState.running){
       if(position.x>=backSpeed*game.world.baseSpeedFactory){

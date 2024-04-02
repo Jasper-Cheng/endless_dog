@@ -17,52 +17,54 @@ class EndlessWorld extends World with HasGameReference,TapCallbacks{
   late final Dog dog;
 
   final Random _random=Random(10);
-  final lifeNotifier = ValueNotifier(1);
+  final lifeNotifier = ValueNotifier(3);
 
   double baseSpeedFactory=1.0;
   DateTime currentTime=DateTime.now();
 
+  late SpawnComponent boneSpawnComponent;
+  late SpawnComponent bombSpawnComponent;
+  late SpawnComponent volFireSpawnComponent;
+
   @override
   Future<void> onLoad() async{
     game.overlays.add(GameScreen.backButtonKey);
-    dog=Dog(position: Vector2(0,-160));
+    dog=Dog(position: Vector2(0,-150));
     add(dog);
 
-    add(
-      SpawnComponent.periodRange(
-        factory: (_) => Bone(),
-        minPeriod: 1.0,
-        maxPeriod: 6.0,
-        area: Rectangle.fromLTRB(
-          game.size.x,-game.size.y/1.8,game.size.x,-game.size.y/1.25
-        ),
-        random: _random,
+    boneSpawnComponent=SpawnComponent.periodRange(
+      factory: (_) => Bone(),
+      minPeriod: 0.1,
+      maxPeriod: 6.0,
+      area: Rectangle.fromLTRB(
+          game.size.x,-game.size.y/3,game.size.x,-game.size.y/1.1
       ),
+      random: _random,
     );
+    add(boneSpawnComponent);
 
-    add(
-      SpawnComponent.periodRange(
-        factory: (_) => Bomb(),
-        minPeriod: 1.0,
-        maxPeriod: 5.0,
-        area: Rectangle.fromLTRB(
-            game.size.x,-game.size.y/1.6,game.size.x,-game.size.y/1.25
-        ),
-        random: _random,
+    bombSpawnComponent=SpawnComponent.periodRange(
+      factory: (_) => Bomb(),
+      minPeriod: 0.1,
+      maxPeriod: 5.0,
+      area: Rectangle.fromLTRB(
+          game.size.x,-game.size.y/2,game.size.x,-game.size.y/1.1
       ),
+      random: _random,
     );
+    add(bombSpawnComponent);
 
     // add(Volcano());
-    add(
-        SpawnComponent(
-          factory: (_) => VolFire(),
-          period: 6,
-          area: Rectangle.fromLTRB(
-              game.size.x,-120,game.size.x,-120
-          ),
-          random: _random,
-        )
+
+    volFireSpawnComponent=SpawnComponent(
+      factory: (_) => VolFire(),
+      period: 6,
+      area: Rectangle.fromLTRB(
+          game.size.x,-120,game.size.x,-120
+      ),
+      random: _random,
     );
+    add(volFireSpawnComponent);
     // add(
     //   SpawnComponent.periodRange(
     //     factory: (_) => Man(),
@@ -77,6 +79,30 @@ class EndlessWorld extends World with HasGameReference,TapCallbacks{
 
     add(TimerComponent(period: 3,repeat: true,onTick: (){
       baseSpeedFactory=baseSpeedFactory+0.1;
+      // print("bone  ${boneSpawnComponent.maxPeriod}");
+      // print("bomb  ${bombSpawnComponent.maxPeriod}");
+      // print("volFire  ${volFireSpawnComponent.period}");
+      if(boneSpawnComponent.maxPeriod!=null){
+        if(boneSpawnComponent.maxPeriod!>1){
+          boneSpawnComponent.maxPeriod=boneSpawnComponent.maxPeriod!-0.1;
+        }else{
+          boneSpawnComponent.maxPeriod=1;
+        }
+      }else{
+        boneSpawnComponent.maxPeriod=6;
+      }
+      if(bombSpawnComponent.maxPeriod!=null){
+        if(bombSpawnComponent.maxPeriod!>0.8){
+          bombSpawnComponent.maxPeriod=bombSpawnComponent.maxPeriod!-0.1;
+        }else{
+          bombSpawnComponent.maxPeriod=0.8;
+        }
+      }else{
+        bombSpawnComponent.maxPeriod=5;
+      }
+      volFireSpawnComponent.period=volFireSpawnComponent.period>1.2?volFireSpawnComponent.period-0.1:1.2;
+      boneSpawnComponent.minPeriod=0.1;
+      bombSpawnComponent.minPeriod=0.1;
       // print("baseSpeedFactory $baseSpeedFactory");
     }));
   }
