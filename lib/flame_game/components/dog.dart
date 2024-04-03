@@ -35,7 +35,7 @@ class Dog extends SpriteAnimationGroupComponent<DogState> with CollisionCallback
     jumpingAlongPathEffect=MoveAlongPathEffect(
         Path()..addPolygon(const [
           Offset(0, 0),
-          Offset(30, -110),
+          Offset(30, -100),
           Offset(60, 0),
         ], false), EffectController(duration: 0.8,
         curve: const Cubic(0.3, 0.75, 0.75, 0.3)),
@@ -75,7 +75,7 @@ class Dog extends SpriteAnimationGroupComponent<DogState> with CollisionCallback
       add(MoveAlongPathEffect(
           Path()..addPolygon([
             const Offset(0, 0),
-            const Offset(40, -110),
+            const Offset(40, -100),
             Offset(80, -position.y-150),
           ], false), EffectController(duration: 0.8+(-position.y-160)*0.001,
           curve: Curves.linear),
