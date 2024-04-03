@@ -10,7 +10,7 @@ class Volcano extends SpriteComponent with HasGameReference, HasWorldReference<E
   @override
   Future<void> onLoad() async {
 
-    size=Vector2(60, 30);
+    size=Vector2(66, 36);
     sprite=await game.loadSprite('volcano.png');
   }
 

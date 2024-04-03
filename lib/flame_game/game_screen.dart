@@ -19,12 +19,12 @@ class GameScreen extends StatelessWidget {
         overlayBuilderMap: {
           backButtonKey: (BuildContext context, EndlessRunner game) {
             return Positioned(
-              top: 46,
+              top: 20,
               right: 20,
               child: GestureDetector(
                 child: const Icon(
                   Icons.arrow_back_outlined,
-                  size: 30,
+                  size: 36,
                 ),
                 onTap: (){
                   game.pauseEngine();

@@ -8,14 +8,14 @@ class Bone extends SpriteAnimationComponent with HasGameReference, HasWorldRefer
   @override
   Future<void> onLoad() async {
 
-    size=Vector2(30, 30);
+    size=Vector2(40, 40);
     // position=Vector2(game.size.x, -game.size.y*0.45);
     animation=SpriteAnimation.spriteList(
       [await game.loadSprite('bone0.png'),await game.loadSprite('bone1.png'),await game.loadSprite('bone0.png'),await game.loadSprite('bone2.png')],
       stepTime: 0.40,
     );
-    // add(SpriteComponent(sprite: await Sprite.load('hello_world.jpg'),position: Vector2(4, 4),size: Vector2(24,24)));
-    add(RectangleHitbox(position: Vector2(4, 4),size: Vector2(24,24),collisionType: CollisionType.passive));
+    // add(SpriteComponent(sprite: await Sprite.load('hello_world.jpg'),position: Vector2(20, 20),size: Vector2(30,16),anchor: Anchor.center));
+    add(RectangleHitbox(position: Vector2(20, 20),size: Vector2(30,16),anchor: Anchor.center,collisionType: CollisionType.passive));
   }
 
   @override

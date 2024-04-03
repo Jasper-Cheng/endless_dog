@@ -29,13 +29,13 @@ class Dog extends SpriteAnimationGroupComponent<DogState> with CollisionCallback
 
   @override
   Future<void> onLoad() async {
-    size=Vector2.all(70);
+    size=Vector2.all(100);
     priority=1;
 
     jumpingAlongPathEffect=MoveAlongPathEffect(
         Path()..addPolygon(const [
           Offset(0, 0),
-          Offset(30, -100),
+          Offset(30, -240),
           Offset(60, 0),
         ], false), EffectController(duration: 0.8,
         curve: const Cubic(0.3, 0.75, 0.75, 0.3)),
@@ -60,8 +60,8 @@ class Dog extends SpriteAnimationGroupComponent<DogState> with CollisionCallback
     };
     current=DogState.running;
     // add(SpriteComponent(sprite: await Sprite.load('hello_world.jpg'),size: Vector2(60,80),position: Vector2(20,10)));
-    // add(CircleComponent(radius: 20,position: Vector2(18,16)));
-    add(CircleHitbox(radius: 20,position: Vector2(18,16)));
+    // add(CircleComponent(radius: 30,position: Vector2(20,20)));
+    add(CircleHitbox(radius: 30,position: Vector2(20,20)));
   }
 
   void jump(){
@@ -75,8 +75,8 @@ class Dog extends SpriteAnimationGroupComponent<DogState> with CollisionCallback
       add(MoveAlongPathEffect(
           Path()..addPolygon([
             const Offset(0, 0),
-            const Offset(40, -100),
-            Offset(80, -position.y-150),
+            const Offset(40, -200),
+            Offset(80, -position.y-200),
           ], false), EffectController(duration: 0.8+(-position.y-160)*0.001,
           curve: Curves.linear),
           onComplete: (){

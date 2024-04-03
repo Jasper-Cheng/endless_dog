@@ -10,7 +10,7 @@ class VolFire extends PositionComponent with HasGameReference, HasWorldReference
   @override
   Future<void> onLoad() async {
     size=Vector2(100, 0);
-    add(Fire(position: Vector2(25,0)));
+    add(Fire(position: Vector2(28,0)));
     add(Volcano(position: Vector2(0,0)));
   }
 

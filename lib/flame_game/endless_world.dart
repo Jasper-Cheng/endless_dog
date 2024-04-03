@@ -25,11 +25,12 @@ class EndlessWorld extends World with HasGameReference,TapCallbacks{
   late SpawnComponent boneSpawnComponent;
   late SpawnComponent bombSpawnComponent;
   late SpawnComponent volFireSpawnComponent;
+  late TimerComponent timerComponent;
 
   @override
   Future<void> onLoad() async{
     game.overlays.add(GameScreen.backButtonKey);
-    dog=Dog(position: Vector2(0,-150));
+    dog=Dog(position: Vector2(0,-200));
     add(dog);
 
     boneSpawnComponent=SpawnComponent.periodRange(
@@ -37,7 +38,7 @@ class EndlessWorld extends World with HasGameReference,TapCallbacks{
       minPeriod: 0.1,
       maxPeriod: 6.0,
       area: Rectangle.fromLTRB(
-          game.size.x,-game.size.y/3,game.size.x,-game.size.y/1.1
+          game.size.x,-220,game.size.x,-game.size.y+100
       ),
       random: _random,
     );
@@ -48,63 +49,44 @@ class EndlessWorld extends World with HasGameReference,TapCallbacks{
       minPeriod: 0.1,
       maxPeriod: 5.0,
       area: Rectangle.fromLTRB(
-          game.size.x,-game.size.y/2,game.size.x,-game.size.y/1.1
+          game.size.x,-220,game.size.x,-game.size.y+100
       ),
       random: _random,
     );
     add(bombSpawnComponent);
 
-    // add(Volcano());
-
     volFireSpawnComponent=SpawnComponent(
       factory: (_) => VolFire(),
       period: 6,
       area: Rectangle.fromLTRB(
-          game.size.x,-120,game.size.x,-120
+          game.size.x,-150,game.size.x,-150
       ),
       random: _random,
     );
     add(volFireSpawnComponent);
-    // add(
-    //   SpawnComponent.periodRange(
-    //     factory: (_) => Man(),
-    //     minPeriod: 0.1,
-    //     maxPeriod: 1,
-    //     area: Rectangle.fromLTRB(
-    //         game.size.x,-230,game.size.x/1.3,-230
-    //     ),
-    //     random: _random,
-    //   ),
-    // );
 
-    add(TimerComponent(period: 3,repeat: true,onTick: (){
+    timerComponent=TimerComponent(period: 3,repeat: true,onTick: (){
       baseSpeedFactory=baseSpeedFactory+0.1;
       // print("bone  ${boneSpawnComponent.maxPeriod}");
       // print("bomb  ${bombSpawnComponent.maxPeriod}");
       // print("volFire  ${volFireSpawnComponent.period}");
+      // print("baseSpeedFactory $baseSpeedFactory");
+      if(baseSpeedFactory>6)timerComponent.removeFromParent();
       if(boneSpawnComponent.maxPeriod!=null){
-        if(boneSpawnComponent.maxPeriod!>1){
-          boneSpawnComponent.maxPeriod=boneSpawnComponent.maxPeriod!-0.1;
-        }else{
-          boneSpawnComponent.maxPeriod=1;
-        }
+        boneSpawnComponent.maxPeriod=6/baseSpeedFactory;
       }else{
         boneSpawnComponent.maxPeriod=6;
       }
       if(bombSpawnComponent.maxPeriod!=null){
-        if(bombSpawnComponent.maxPeriod!>0.8){
-          bombSpawnComponent.maxPeriod=bombSpawnComponent.maxPeriod!-0.1;
-        }else{
-          bombSpawnComponent.maxPeriod=0.8;
-        }
+        bombSpawnComponent.maxPeriod=5/baseSpeedFactory;
       }else{
         bombSpawnComponent.maxPeriod=5;
       }
       volFireSpawnComponent.period=volFireSpawnComponent.period>1.2?volFireSpawnComponent.period-0.1:1.2;
       boneSpawnComponent.minPeriod=0.1;
       bombSpawnComponent.minPeriod=0.1;
-      // print("baseSpeedFactory $baseSpeedFactory");
-    }));
+    });
+    add(timerComponent);
   }
 
   void addLife(){

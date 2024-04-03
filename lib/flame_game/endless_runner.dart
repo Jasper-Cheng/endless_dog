@@ -8,6 +8,7 @@ class EndlessRunner extends FlameGame<EndlessWorld> with HasCollisionDetection{
 
   EndlessRunner() : super(
     world: EndlessWorld(),
+    camera: CameraComponent.withFixedResolution(width: 1600, height: 720),
   );
 
   @override
@@ -17,10 +18,10 @@ class EndlessRunner extends FlameGame<EndlessWorld> with HasCollisionDetection{
 
     final lifeComponent=TextComponent(
         text: world.lifeNotifier.value.toString(),
-        position: Vector2(20, 40),
+        position: Vector2(20, 20),
         textRenderer: TextPaint(
           style: const TextStyle(
-            fontSize: 26,
+            fontSize: 46,
             color: Colors.black,
           ),
         )

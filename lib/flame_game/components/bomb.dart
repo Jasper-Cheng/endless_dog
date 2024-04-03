@@ -9,19 +9,21 @@ class Bomb extends SpriteAnimationComponent with HasGameReference, HasWorldRefer
   @override
   Future<void> onLoad() async {
 
-    size=Vector2(30, 30);
+    size=Vector2(40, 40);
     animation=SpriteAnimation.spriteList(
       [await game.loadSprite('bomb1.png'),await game.loadSprite('bomb2.png'),await game.loadSprite('bomb3.png'),await game.loadSprite('bomb4.png')],
       stepTime: 0.3,
     );
     // add(CircleComponent(
-    //   radius: 14,
-    //   position: Vector2(1,1)
+    //   radius: 18,
+    //   anchor: Anchor.center,
+    //   position: Vector2(20,20)
     // ));
     // add(RotateEffect.by(360, EffectController(duration: 1,infinite: true)));
     add(CircleHitbox(
-        radius: 14,
-        position: Vector2(1,1),
+        radius: 18,
+        anchor: Anchor.center,
+        position: Vector2(20,20),
         collisionType: CollisionType.passive
     ));
   }
