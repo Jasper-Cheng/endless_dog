@@ -1,6 +1,8 @@
+import 'package:endless_dog/application_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 import '../router.dart';
 
@@ -17,6 +19,8 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    print(Provider.of<ApplicationController>(context).getBestGrade());
+    print(Provider.of<ApplicationController>(context).getStartEndTimeGradeRecordList());
     return Scaffold(
       body: SafeArea(
         child: Stack(
@@ -252,6 +256,44 @@ class _HomeState extends State<Home> {
                         );
                       });
                 },
+              ),
+            ),
+            Positioned(
+              top: 10,
+              left: 30,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Best Grade",
+                    style: TextStyle(
+                      color: Colors.green,
+                      fontSize: 24,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        "${context.watch<ApplicationController>().getBestGrade()??"暂无"}",
+                        style: const TextStyle(
+                          color: Colors.green,
+                          fontSize: 24,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      const SizedBox(width: 6,),
+                      Text(
+                        context.watch<ApplicationController>().getBestGrade()!=null?"s":"",
+                        style: const TextStyle(
+                          color: Colors.green,
+                          fontSize: 24,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             )
           ],

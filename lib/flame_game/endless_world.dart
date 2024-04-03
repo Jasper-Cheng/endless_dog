@@ -7,7 +7,9 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/experimental.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../application_controller.dart';
 import 'components/bone.dart';
 import 'components/volFire.dart';
 import 'game_screen.dart';
@@ -17,7 +19,7 @@ class EndlessWorld extends World with HasGameReference,TapCallbacks{
   late final Dog dog;
 
   final Random _random=Random(10);
-  final lifeNotifier = ValueNotifier(3);
+  final lifeNotifier = ValueNotifier(1);
 
   double baseSpeedFactory=1.0;
   DateTime currentTime=DateTime.now();
@@ -26,6 +28,8 @@ class EndlessWorld extends World with HasGameReference,TapCallbacks{
   late SpawnComponent bombSpawnComponent;
   late SpawnComponent volFireSpawnComponent;
   late TimerComponent timerComponent;
+
+  late DateTime startTime;
 
   @override
   Future<void> onLoad() async{
@@ -89,6 +93,13 @@ class EndlessWorld extends World with HasGameReference,TapCallbacks{
     add(timerComponent);
   }
 
+  @override
+  void onMount() {
+    // TODO: implement onMount
+    super.onMount();
+    startTime=DateTime.now();
+  }
+
   void addLife(){
     lifeNotifier.value++;
     // print("addLife lifeNotifier.value ${lifeNotifier.value}");
@@ -99,6 +110,15 @@ class EndlessWorld extends World with HasGameReference,TapCallbacks{
     // print("addLife lifeNotifier.value ${lifeNotifier.value}");
     if(lifeNotifier.value==0){
       game.pauseEngine();
+      if(game.buildContext!=null){
+        int? lastBestGrade=game.buildContext!.read<ApplicationController>().getBestGrade();
+        DateTime endTime=DateTime.now();
+        int currentGrade=endTime.difference(startTime).inSeconds;
+        if(lastBestGrade==null||lastBestGrade<currentGrade){
+          game.buildContext!.read<ApplicationController>().setBestGrade(currentGrade);
+        }
+        game.buildContext!.read<ApplicationController>().addStartEndTimeGradeRecordItem("${startTime.toString()}&&${endTime.toString()}&&$currentGrade");
+      }
       game.overlays.add(GameScreen.dieDialogKey);
     }
   }

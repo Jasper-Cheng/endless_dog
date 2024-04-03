@@ -1,16 +1,22 @@
 import 'dart:async';
 
 import 'package:endless_dog/router.dart';
-import 'package:endless_dog/style/palette.dart';
 import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import 'application_controller.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Flame.device.setLandscape();
   await Flame.device.fullScreen();
-  runApp(const MyApp());
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (context) => ApplicationController())
+    ],
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -18,20 +24,21 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        Provider(create: (context) => Palette()),
-        // ChangeNotifierProvider(create: (context) => PlayerProgress()),
-      ],
-      child: Builder(builder: (context) {
-        return MaterialApp.router(
-          title: 'Endless Dog',
-          theme: ThemeData(
-            brightness: Brightness.light,
-          ),
-          routerConfig: router,
-        );
-      }),
+    return FutureBuilder<bool>(
+      future: Provider.of<ApplicationController>(context).init(),
+      builder: (BuildContext context, AsyncSnapshot<bool> snapshot){
+        if(snapshot.hasData){
+          return MaterialApp.router(
+            title: 'Endless Dog',
+            theme: ThemeData(
+              brightness: Brightness.light,
+            ),
+            routerConfig: router,
+          );
+        }else{
+          return Container();
+        }
+      },
     );
   }
 }

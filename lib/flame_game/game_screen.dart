@@ -13,33 +13,36 @@ class GameScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: GameWidget<EndlessRunner>(
-        game: EndlessRunner(),
-        overlayBuilderMap: {
-          backButtonKey: (BuildContext context, EndlessRunner game) {
-            return Positioned(
-              top: 20,
-              right: 20,
-              child: GestureDetector(
-                child: const Icon(
-                  Icons.arrow_back_outlined,
-                  size: 36,
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        body: GameWidget<EndlessRunner>(
+          game: EndlessRunner(),
+          overlayBuilderMap: {
+            backButtonKey: (BuildContext context, EndlessRunner game) {
+              return Positioned(
+                top: 20,
+                right: 20,
+                child: GestureDetector(
+                  child: const Icon(
+                    Icons.arrow_back_outlined,
+                    size: 30,
+                  ),
+                  onTap: (){
+                    game.pauseEngine();
+                    game.overlays.add(backDialogKey);
+                  },
                 ),
-                onTap: (){
-                  game.pauseEngine();
-                  game.overlays.add(backDialogKey);
-                },
-              ),
-            );
+              );
+            },
+            backDialogKey:(BuildContext context, EndlessRunner game) {
+              return GameBackDialog(context: context,game: game);
+            },
+            dieDialogKey: (BuildContext context, EndlessRunner game) {
+              return GameDieDialog(context: context,game: game);
+            },
           },
-          backDialogKey:(BuildContext context, EndlessRunner game) {
-            return GameBackDialog(context: context,game: game);
-          },
-          dieDialogKey: (BuildContext context, EndlessRunner game) {
-            return GameDieDialog(context: context,game: game);
-          },
-        },
+        ),
       ),
     );
   }
